@@ -1,6 +1,6 @@
 
 set(GTEST_VERSION "v1.11.0")
-set(GTEST_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/gtest")
+set(GTEST_PATH "${LIB_DIR}/gtest")
 
 set(GTEST_LIB_PATH "${GTEST_PATH}/lib/${GTEST_VERSION}")
 set(GTEST_SRC_PATH "${GTEST_PATH}/src/")
