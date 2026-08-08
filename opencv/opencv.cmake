@@ -2,18 +2,20 @@ set(OPENCV_VERSION v4.11.0)                                                     
 if (OPENCV_VERSION STREQUAL v4.11.0)
     set(BUILD_OPENCV4 true)
     add_definitions(-DBUILD_OPENCV4)
-    set(OPENCV_BUILD_TYPE release)
+    set(OPENCV_BUILD_TYPE ${AURA_DEPENDENCY_VARIANT})
 
-    # 统一的平台目录结构
-    if(TARGET_OS STREQUAL "android")
-        # Android 平台使用 arm64-v8a 架构
-        set(OPENCV_PLATFORM_DIR ${LIB_DIR}/opencv/lib/${OPENCV_VERSION}/android-arm64-v8a-release)
-    elseif(TARGET_OS STREQUAL "mac")
-        # macOS 平台使用 x86_64 架构
-        set(OPENCV_PLATFORM_DIR ${LIB_DIR}/opencv/lib/${OPENCV_VERSION}/mac-x86_64-release)
-    else()
-        # 其他平台使用通用命名
-        set(OPENCV_PLATFORM_DIR ${LIB_DIR}/opencv/lib/${OPENCV_VERSION}/${TARGET_OS}-${TARGET_ARCH}-${OPENCV_BUILD_TYPE})
+    # Dependency directories follow <os>-<arch>-<variant>. Never silently use
+    # x86_64 or arm64 binaries for a different target architecture.
+    set(OPENCV_PLATFORM_DIR
+        ${LIB_DIR}/opencv/lib/${OPENCV_VERSION}/${TARGET_OS}-${TARGET_ARCH}-${OPENCV_BUILD_TYPE})
+    set(AURA_OPENCV_ROOT "${OPENCV_PLATFORM_DIR}" CACHE PATH
+        "OpenCV package root for the selected target")
+    set(OPENCV_PLATFORM_DIR "${AURA_OPENCV_ROOT}")
+
+    if(NOT EXISTS "${OPENCV_PLATFORM_DIR}")
+        message(WARNING
+            "No bundled OpenCV package for ${TARGET_OS}-${TARGET_ARCH}. "
+            "Set -DAURA_OPENCV_ROOT=<path> or -DBUILD_OPENCV=OFF.")
     endif()
 
     set(OPENCV_DIR ${OPENCV_PLATFORM_DIR})

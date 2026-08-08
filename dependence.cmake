@@ -7,7 +7,9 @@ set(LIB_DIR ${CMAKE_SOURCE_DIR}/${LIB_PURE_DIR})
 
 # include(${LIB_DIR}/opencl/opencl.cmake)
 
-include(${LIB_DIR}/opencv/opencv.cmake)
+if(BUILD_OPENCV)
+    include(${LIB_DIR}/opencv/opencv.cmake)
+endif()
 
 
  include(${LIB_DIR}/gtest/gtest.cmake)
