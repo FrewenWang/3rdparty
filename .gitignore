@@ -28,3 +28,6 @@
 *.exe
 *.out
 *.app
+
+# Build-system caches created while validating vendored sources
+.gradle/
